@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>text index</title>
+    <script src="./toolbox.js"></script>
+    <script>
+        toolbox.ajax('http://10.220.115.57:8089/ajax/testTest/test1.json',{
+          data: {testKey: '1'},
+          type: 'post'
+        },function (res) { console.log(res) })
+        console.log(window.location)
+        console.log(toolbox.getUrl.search())
+        console.log(toolbox.getUrl.searchVal('a'))
+        console.log(toolbox.getUrl.hash())
+        console.log(toolbox.getDate.date(new Date(),' xxxx-xx-xx xx:xx'))
+        console.log(toolbox.getDate.date(new Date(),'xxxx年xx月xx日 xx:xx:xx  '))
+        console.log(toolbox.getDate.date(new Date()))
+        console.log(toolbox.getDate.passTime((new Date()).getTime()-500000))
+        console.log(toolbox.getDate.remainTime((new Date()).getTime()+5000000))
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
