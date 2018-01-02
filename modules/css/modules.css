@@ -1,0 +1,59 @@
+  /*  加载动画  */
+
+.xj-loading-container {
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	z-index: 1001;
+	background: rgba(0,0,0,.2);
+}
+.xj-loading {
+	box-sizing: border-box;
+  	position: absolute;
+  	display: block;
+  	width: 20px;
+  	height: 20px;
+  	border: 2px solid #666;
+  	border-right: none;
+  	top: 50%;
+  	margin-top: -10px;
+  	left: 50%;
+  	margin-left: -10px;
+  	border-radius: 50%;
+	animation: loading-animation 600ms linear infinite;
+	-webkit-animation: loading-animation 600ms linear infinite;
+}
+@keyframes loading-animation{
+	from {
+		transform: rotate(0);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+@-moz-keyframes loading-animation{
+	from {
+		transform: rotate(0);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+@-webkit-keyframes loading-animation{
+	from {
+		transform: rotate(0);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+@-o-keyframes loading-animation{
+	from {
+		transform: rotate(0);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}

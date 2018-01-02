@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>虚拟数字键盘</title>
+    <link rel="stylesheet" href="./css.css">
+    <style>
+        #fictitious-number {
+            width: 90%;
+            height:60px;
+            font-size: 16px;
+            line-height: 60px;
+            background: #fff;
+            border: 1px solid #999;
+            color: #333;
+            padding: 0 10px;
+            margin: auto;
+        }
+    </style>
+    <script src="./js.js"></script>
+</head>
+<body>
+    <div id="fictitious-number"></div>
+<!--    <div id="fictitious-keyboard" class="">
+        <p>﹀</p>
+        <span>7</span>
+        <span class="middle">8</span>
+        <span>9</span>
+        <span>4</span>
+        <span class="middle">5</span>
+        <span>6</span>
+        <span>1</span>
+        <span class="middle">2</span>
+        <span>3</span>
+        <span class="ot">.</span>
+        <span class="middle">0</span>
+        <span class="ot">×</span>
+    </div>-->
+    <script>
+        var ele = document.getElementById('fictitious-number')
+        var numberInput = new FictitiousNumber(ele)
+    </script>
+</body>
+</html>
