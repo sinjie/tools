@@ -128,7 +128,7 @@
       var date = time? new Date(time): new Date()
       var year = date.getFullYear()
       var month = this.formatNumber(date.getMonth() + 1)
-      var day = this.formatNumber(date.getDay())
+      var day = this.formatNumber(date.getDate())
       var houre = this.formatNumber(date.getHours())
       var minutes = this.formatNumber(date.getMinutes())
       var second = this.formatNumber(date.getSeconds())
