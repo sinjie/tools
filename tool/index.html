@@ -1,27 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>text index</title>
-    <script src="./toolbox.js"></script>
-    <script>
-        toolbox.ajax('http://10.220.115.57:8089/ajax/testTest/test1.json',{
-          data: {testKey: '1'},
-          type: 'post'
-        },function (res) { console.log(res) })
-        console.log(window.location)
-        console.log(toolbox.getUrl.search())
-        console.log(toolbox.getUrl.searchVal('a'))
-        console.log(toolbox.getUrl.hash())
-        console.log(toolbox.getDate.date(new Date(),' xxxx-xx-xx xx:xx'))
-        console.log(toolbox.getDate.date(new Date(),'xxxx年xx月xx日 xx:xx:xx  '))
-        console.log(toolbox.getDate.date(new Date()))
-        console.log(toolbox.getDate.passTime((new Date()).getTime()-500000))
-        console.log(toolbox.getDate.remainTime((new Date()).getTime()+5000000))
-
-    </script>
+  <meta charset="UTF-8">
+  <title>text index</title>
+  <script src="./toolbox.js"></script>
+  <script src="./arrayTools.js"></script>
 </head>
-<body>
 
+<body>
+  <button onclick="isArray()">判断是否是数组</button><br/><br/>
+  <button onclick="cloneArray()">数组拷贝</button><br/><br/>
+  <button onclick="spliceArray()">数组截取替换</button><br/><br/>
+  <button onclick="findArray()">查找判断项</button><br/><br/>
+  <button onclick="filterTree()">过滤树节点</button><br/><br/>
+  <button onclick="concatFilter()">合并去重</button><br/><br/>
+  <button onclick="concatFilter2()">合并取未重复</button><br/><br/>
+  <button onclick="arraySort()">数组排序</button><br/><br/>
 </body>
+
+<script>
+  toolbox.ajax('http://10.220.115.57:8089/ajax/testTest/test1.json', {
+    data: {
+      testKey: '1'
+    },
+    type: 'post'
+  }, function (res) {
+    console.log(res)
+  })
+  console.log(window.location)
+  console.log(toolbox.getUrl.search())
+  console.log(toolbox.getUrl.searchVal('a'))
+  console.log(toolbox.getUrl.hash())
+  console.log(toolbox.getDate.date(new Date(), ' xxxx-xx-xx xx:xx'))
+  console.log(toolbox.getDate.date(new Date(), 'xxxx年xx月xx日 xx:xx:xx  '))
+  console.log(toolbox.getDate.date(new Date()))
+  console.log(toolbox.getDate.passTime((new Date()).getTime() - 500000))
+  console.log(toolbox.getDate.remainTime((new Date()).getTime() + 5000000))
+
+
+  function isArray() {
+    let arr1 = []
+    console.log('---- typeof(arr1): ', typeof (arr1));
+    // instanceof 用于判断一个变量是否某个对象的实例
+    console.log('---- arr1 instanceof Array : ', arr1 instanceof Array);
+    console.log('---- arr1 instanceof Object: ', arr1 instanceof Object);
+    // constructor 属性返回对创建此对象的数组函数的引用
+    console.log('---- constructor: ', arr1.constructor === Array);
+    console.log('---- 严谨模式: ', arr1 && typeof arr1 === 'object' && Array === arr1.constructor);
+    /* 使用instaceof和construcor, 被判断的array必须是在当前页面声明的 */
+    console.log('---- 特性判断方法: ', arr1 && typeof arr1 === 'object' && typeof arr1.length === 'number' && typeof arr1
+      .splice === 'function' && !(arr1.propertyIsEnumerable('length')));
+    /* 数组是不能枚举length属性  arr1.propertyIsEnumerable('length') 判断指定的属性(length)是否可列举 */
+    console.log('---- 简单直接方法: ', ArrayTools.isArray(arr1));
+  }
+
+  // 数组方法 unshift、push、shift、pop、slice、splice、concat、of、from、indexOf、includes、filter、find、findIndex、some、every、map、forEach、reduce、reduceRight、toString、join、reverse
+  // clone 数组
+  function cloneArray() {
+    let arr1 = [1, 2, 3]
+    let arr2 = [4, 5, {
+      a: 'abc'
+    }]
+    let arr3 = [1, 2, 3]
+    let arr4 = [4, 5, {
+      a: 'abc'
+    }]
+    let arr5 = [4, 5, {
+      a: 'abc'
+    }]
+    let arr6 = [4, 5, {
+        a: 'abc'
+      },
+      [7, 8, 9]
+    ]
+    // slice 浅拷贝 
+    let sliceArr1 = arr1.slice()
+    let sliceArr2 = arr2.slice()
+    console.log('---- sliceArr1: ', sliceArr1);
+    console.log('---- sliceArr2: ', sliceArr2);
+    // arr1[2] = 10
+    // arr2[2].a = "xyz"
+    // console.log('---- sliceArr1: ', sliceArr1);
+    // console.log('---- sliceArr2: ', sliceArr2);
+
+    // concat 浅拷贝
+    let concatArr1 = arr3.concat()
+    let concatArr2 = arr4.concat()
+    console.log('---- sliceArr1: ', concatArr1);
+    console.log('---- sliceArr2: ', concatArr2);
+    // arr3[2] = 10
+    // arr4[2].a = "xyz"
+    // console.log('---- sliceArr1: ', concatArr1);
+    // console.log('---- sliceArr2: ', concatArr2);
+
+    // JSON.stringify 深拷贝
+    let cloneArr1 = ArrayTools.clone(arr5)
+    console.log('---- cloneArr1: ', cloneArr1);
+    arr5[2].a = "xyz"
+    console.log('---- arr5: ', arr5);
+    console.log('---- cloneArr1: ', cloneArr1);
+
+    // 递归深拷贝
+    let deepArr1 = cloneDeep(arr6)
+    console.log('---- deepArr1: ', deepArr1);
+    arr6[2].a = "xyz"
+    console.log('---- arr6: ', arr6);
+    console.log('---- deepArr1: ', deepArr1);
+
+    function cloneDeep(arr) {
+      let newArr = arr.map(item => {
+        if (typeof item !== 'object') return item
+        let newItem = ArrayTools.isArray(item) ? [] : {}
+        for (const key in item) {
+          if (item.hasOwnProperty(key)) {
+            newItem[key] = typeof item[key] !== 'object' ? item[key] : cloneDeep(item[key])
+          }
+        }
+        return newItem
+      })
+      return newArr
+    }
+  }
+
+  // 数组截取替换
+  function spliceArray() {
+    let arr1 = [1, 2, 3, 4, 5];
+    let arr2 = [1, 2, 3, 4, 5];
+    let arr3 = [1, 2, 3, 4, 5];
+    let arr4 = [1, 2, 3, 4, 5];
+    console.log('---- arr1.splice(2): ', arr1.splice(2), arr1);
+    console.log('---- arr2.splice(0,1,2): ', arr2.splice(0, 1, 2), arr2);
+    console.log('---- arr3[0] = 6: ', arr3[0] = 6, arr3);
+    console.log('---- delete arr4[1]: ', delete arr4[1], arr4);
+  }
+
+  // 查找判断选项
+  function findArray() {
+    let arr1 = ['a', 'b', 'c', {
+      d: 'test'
+    }, {
+      d: 'b'
+    }, {
+      d: 'test'
+    }]
+    console.log('---- filter: ', arr1.filter(item => item.d === 'test'));
+    console.log('---- find: ', arr1.find(item => item.d === 'test'));
+    console.log('---- find: ', arr1.find(item => item.d === 'a'));
+    console.log('---- findIndex: ', arr1.findIndex(item => item.d === 'test'));
+    console.log('---- findIndex: ', arr1.findIndex(item => item.d === 'a'));
+    console.log('---- some: ', arr1.some(item => item.d === 'test'));
+    console.log('---- every: ', arr1.every(item => item.d === 'test'));
+  }
+
+  // 过滤树节点
+  function filterTree() {
+    var tree = [{
+      id: 1,
+      text: '中国',
+      children: [{
+          id: 2,
+          text: '浙江',
+          children: [{
+              id: 3,
+              text: '杭州',
+            },
+            {
+              id: 4,
+              text: '丽水',
+              children: [{
+                  id: 5,
+                  text: '庆元'
+                },
+                {
+                  id: 6,
+                  text: '龙泉'
+                }
+              ]
+            },
+            {
+              id: 7,
+              text: '温州',
+              children: [{
+                id: 8,
+                text: '泰顺'
+              }]
+            },
+          ]
+        },
+        {
+          id: 9,
+          text: '重复测试',
+          children: [{
+            id: 10,
+            text: '温州'
+          }]
+        }
+      ]
+    }]
+
+    console.log(ArrayTools.filterTree(tree, '温州'))
+  }
+
+  // 多个数组合并去重
+  function concatFilter() {
+    var arr0 = [1, 2, 3, 4, 5]
+    var arr1 = [2, 4, 6, 8, 0]
+    var arr2 = [5, 6, 7, 8, 9]
+
+    console.log(ArrayTools.mergeRemoveSame(arr0, arr1, arr2))
+  }
+
+  // 多个数组返回没重复过的项组成的数组
+  function concatFilter2() {
+    var arr0 = [1, 2, 3, 4, 5]
+    var arr1 = [2, 4, 6, 8, 0]
+    var arr2 = [5, 6, 7, 8, 9]
+
+    console.log(ArrayTools.mergeGetOnly(arr0, arr1, arr2))
+  }
+
+  // 数组排序
+  function arraySort() {
+    var arr1 = [2, 5, 7, 3, 2, 11, 0]
+    var arr2 = ['123Name', 'Tom', 'lining', 'jack', 'JimGreen', 'Lili', 'tank', 'name123']
+    console.log('---- ArrayTools.sort(arr1): ', ArrayTools.sort(arr1));
+    console.log('---- ArrayTools.sort(arr1, "number"): ', ArrayTools.sort(arr1, 'number'));
+    console.log('---- ArrayTools.sort(arr1, "number").reverse(): ', ArrayTools.sort(arr1, 'number').reverse());
+    console.log('---- ArrayTools.sort(arr2): ', ArrayTools.sort(arr2));
+    console.log('---- ArrayTools.sort(arr2, "number"):!!! ', ArrayTools.sort(arr2, 'number'));
+    console.log('---- ArrayTools.sort(arr2, "ignoreCase"): ', ArrayTools.sort(arr2, 'ignoreCase'));
+    console.log('---- Math.max arr1: ', Math.max(...arr1));
+    console.log('---- Math.max arr2: ', Math.max(...arr2));
+  }
+
+
+  /* 
+   * push 方法性能比 concat 好很多， push改变原数组，concat返回新数组
+   * slice 和 splice 都返回新数组， 但 splice 同时改变原数组
+   * 所有js对象都有 toString()
+   */
+</script>
+
 </html>

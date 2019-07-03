@@ -184,5 +184,78 @@
   * */
   trim: function (str) {
     return str.replace(/(^\s*)|(\s*$)/g, '')
-  }
+  },
+  /* 
+  * 是否是字符串
+  */
+  isString: function (param) {  
+    return typeof param === 'string'
+  },
+  /* 
+  * 是否是布尔值
+  */
+  isBoolean: function (param) {  
+    return typeof param === 'boolean'
+  },
+  /* 
+  * 是否是数字
+  */
+  isNumber: function (param) {  
+    return typeof param === 'number'
+  },
+  /* 
+  * 是否是数组
+  */
+  isArray: function (param) {  
+    return Object.prototype.toString.call(param) === '[object Array]'
+  },
+  /* 
+  * 是否是对象
+  */
+  isObject: function (param) {  
+    return Object.prototype.toString.call(param) === '[object Object]'
+  },
+  /* 
+  * 是否是函数
+  */
+  isFunction: function (param) {  
+    return Object.prototype.toString.call(param) === '[object Function]'
+  },
+  /* 
+  * 判断类型
+  */
+  typeOf: function(param) {
+    let type = typeof param
+    if(isNaN(param)) type = NaN
+    if(this.isArray(param)) type = 'Array'
+    if(isObject(param)) type = 'Object'
+    if(isFunction(param)) type = 'Function'
+    return type
+  },
+  /**
+  * 取小数
+  * number: 数字
+  * index: 取值位数(默认2位小数)
+  * type: 类型  'fixed' -- 四舍五入;  'floor' -- 截取;
+   */
+  toFixed: function(number, index, type) {
+    if (this.isNumber(number)) {
+      index = index ? index : 2
+      if (type === 'fixed') {
+        return number.toFixed(index)
+      }
+      if (type === 'floor') {
+        return Math.floor(number * Math.pow(10, index)) / Math.pow(10, index)
+      }
+    }else{
+      return NaN
+    }
+  },
+  /**
+  * 浮点累加
+  * NumberList: {Array}
+   */
+  fixedSum: function(NumberList) {
+    
+  },
 }
