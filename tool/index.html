@@ -20,23 +20,23 @@
 </body>
 
 <script>
-  toolbox.ajax('http://10.220.115.57:8089/ajax/testTest/test1.json', {
-    data: {
-      testKey: '1'
-    },
-    type: 'post'
-  }, function (res) {
-    console.log(res)
-  })
-  console.log(window.location)
-  console.log(toolbox.getUrl.search())
-  console.log(toolbox.getUrl.searchVal('a'))
-  console.log(toolbox.getUrl.hash())
-  console.log(toolbox.getDate.date(new Date(), ' xxxx-xx-xx xx:xx'))
-  console.log(toolbox.getDate.date(new Date(), 'xxxx年xx月xx日 xx:xx:xx  '))
-  console.log(toolbox.getDate.date(new Date()))
-  console.log(toolbox.getDate.passTime((new Date()).getTime() - 500000))
-  console.log(toolbox.getDate.remainTime((new Date()).getTime() + 5000000))
+  // toolbox.ajax('http://10.220.115.57:8089/ajax/testTest/test1.json', {
+  //   data: {
+  //     testKey: '1'
+  //   },
+  //   type: 'post'
+  // }, function (res) {
+  //   console.log(res)
+  // })
+  // console.log(window.location)
+  // console.log(toolbox.getUrl.search())
+  // console.log(toolbox.getUrl.searchVal('a'))
+  // console.log(toolbox.getUrl.hash())
+  // console.log(toolbox.getDate.date(new Date(), ' xxxx-xx-xx xx:xx'))
+  // console.log(toolbox.getDate.date(new Date(), 'xxxx年xx月xx日 xx:xx:xx  '))
+  // console.log(toolbox.getDate.date(new Date()))
+  // console.log(toolbox.getDate.passTime((new Date()).getTime() - 500000))
+  // console.log(toolbox.getDate.remainTime((new Date()).getTime() + 5000000))
 
 
   function isArray() {
@@ -79,20 +79,20 @@
     let sliceArr2 = arr2.slice()
     console.log('---- sliceArr1: ', sliceArr1);
     console.log('---- sliceArr2: ', sliceArr2);
-    // arr1[2] = 10
-    // arr2[2].a = "xyz"
-    // console.log('---- sliceArr1: ', sliceArr1);
-    // console.log('---- sliceArr2: ', sliceArr2);
+    arr1[2] = 10
+    arr2[2].a = "xyz"
+    console.log('---- sliceArr1: ', sliceArr1);
+    console.log('---- sliceArr2: ', sliceArr2);
 
     // concat 浅拷贝
     let concatArr1 = arr3.concat()
     let concatArr2 = arr4.concat()
     console.log('---- sliceArr1: ', concatArr1);
     console.log('---- sliceArr2: ', concatArr2);
-    // arr3[2] = 10
-    // arr4[2].a = "xyz"
-    // console.log('---- sliceArr1: ', concatArr1);
-    // console.log('---- sliceArr2: ', concatArr2);
+    arr3[2] = 10
+    arr4[2].a = "xyz"
+    console.log('---- sliceArr1: ', concatArr1);
+    console.log('---- sliceArr2: ', concatArr2);
 
     // JSON.stringify 深拷贝
     let cloneArr1 = ArrayTools.clone(arr5)
@@ -230,7 +230,8 @@
     console.log('---- ArrayTools.sort(arr2): ', ArrayTools.sort(arr2));
     console.log('---- ArrayTools.sort(arr2, "number"):!!! ', ArrayTools.sort(arr2, 'number'));
     console.log('---- ArrayTools.sort(arr2, "ignoreCase"): ', ArrayTools.sort(arr2, 'ignoreCase'));
-    console.log('---- Math.max arr1: ', Math.max(...arr1));
+    console.log('---- Math.max arr1: ', Math.min(...arr1));
+    console.log('---- Math.max arr1: ', Math.max.apply(null, arr1));
     console.log('---- Math.max arr2: ', Math.max(...arr2));
   }
 
@@ -238,7 +239,7 @@
   /* 
    * push 方法性能比 concat 好很多， push改变原数组，concat返回新数组
    * slice 和 splice 都返回新数组， 但 splice 同时改变原数组
-   * 所有js对象都有 toString()
+   * 所有js对象都有 toString()  join(',')
    */
 </script>
 
