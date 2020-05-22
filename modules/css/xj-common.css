@@ -118,6 +118,10 @@
   overflow: auto;
 }
 
+.m-auto {
+  margin: auto;
+}
+
 .overflow-scroll {
   overflow: scroll;
 }
