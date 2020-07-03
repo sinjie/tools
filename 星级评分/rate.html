@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+    <div id="list">星级评分</div>
+    <ul class="rating" id="rating">
+        <!-- <li class="rating-item" title="很满意"></li>
+        <li class="rating-item" title="满意"></li>
+        <li class="rating-item" title="一般"></li>
+        <li class="rating-item" title="差"></li>
+        <li class="rating-item" title="非常差"></li> -->
+    </ul>
+    <script>
+    $(document).ready(()=>{
+        class Rate{
+            constructor(light,total,el){
+                this.light = light;
+                this.total = total;
+                this.$el = $(el);
+                this.array = new Array(total);
+            }
+            init(){
+               this.defaultShow();
+               let lis = $('#rating .rating-item');
+               var self = this;
+               this.click(lis,self);
+               this.mousemove(lis,self);
+               this.mouseout(lis,self);
+               if(this.light>0){
+                    lis.trigger('mouseout');
+               }
+            }
+            defaultShow(){
+               var html=''
+               $.each(this.array,function(index,value){
+                html+='<li class="rating-item"></li>'
+               });
+               $('#rating').html(html);
+            }
+            click(lis,self){
+                lis.click(function(){
+                    console.log("click",self.light);
+                    // $(this).off('mousemove mouseout');
+                    let idx = $(this).index();
+                    self.light = idx+1;
+                    self.loop(lis,idx,self);
+                })
+            }
+            mousemove(lis,self){
+                lis.on('mousemove',function(){
+                    console.log("mousemove",self.light);
+                    var idx = $(this).index();
+                    console.log("111",idx);
+                    self.loop(lis,idx,self);
+                })
+            }
+            mouseout(lis,self){
+                lis.on('mouseout',function(){
+                    console.log("mouseout",self.light); 
+                    self.loop(lis,'',self);
+                })
+            }
+            loop(lis,idx,self){
+                var idx = idx||idx===0?idx:Number(self.light-1)
+                console.log("000",idx);
+                lis.each(function(index){
+                       if(index<=idx){
+                        $(this).removeClass('rating-item').addClass('rating-light');
+                       }else{
+                        $(this).removeClass('rating-light').addClass('rating-item');
+                       }
+                    })
+            }
+        }
+        let five = new Rate(0,8,'#rating');
+        five.init();
+    })
+    </script>
+</body>
+<style>
+    *{margin:0;padding: 0;}
+    .rating{
+        display: flex;
+    }
+    .rating-item{
+        width: 132px;
+        height: 132px;
+        list-style: none;
+        background-image: url(./rate.png);
+        background-position: 196px 470px;    /* 794 196 */
+    }
+    .rating-light{
+        width: 132px;
+        height: 132px;
+        list-style: none;
+        background-image: url(./rate.png);
+        background-position: 794px 470px;    /* 794 196 */
+    }
+</style>
+</html>

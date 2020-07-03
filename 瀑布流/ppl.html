@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>瀑布流</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  </head>
+  <body>
+    <div class="main"></div>
+    <script>
+      var canAdd = true
+      var imgs = [
+        "./imgs/1.jpg",
+        "./imgs/2.jpg",
+        "./imgs/3.jpg",
+        "./imgs/4.jpg",
+        "./imgs/5.jpg",
+        "./imgs/6.jpg",
+        "./imgs/7.jpg",
+        "./imgs/8.jpg",
+        "./imgs/9.jpg",
+        "./imgs/10.jpg",
+        "./imgs/11.jpg",
+        "./imgs/12.jpg",
+        "./imgs/13.jpg",
+        "./imgs/14.jpg",
+        "./imgs/15.jpg",
+        "./imgs/16.jpg",
+        "./imgs/17.jpg",
+        "./imgs/18.jpg",
+        "./imgs/19.jpg",
+        "./imgs/20.jpg",
+      ]
+      $(document).ready(function () {
+        class Waterfall {
+          constructor(el, colNum = 5, loadNum = 8, sensitivity = 50) {
+            this.$el = $(el)
+            this.colNum = colNum
+            this.oneLoadNum = loadNum
+            this.sensitivity = sensitivity
+            function* CreateId() {
+              let id = 0
+              while (true) {
+                yield ++id
+              }
+            }
+            this.createId = CreateId()
+            let self = this
+            this.AddImage = function* (num) {
+              let count = 0
+              while (count < num) {
+                count++
+                yield self.addImage()
+              }
+            }
+          }
+          init(defaultNum) {
+            const colWidth = parseInt(this.$el.width() / this.colNum) - (this.colNum + 1)
+            let html = ""
+            for (let i = 0; i < this.colNum; i++) {
+              html += `<div class="box" data-num="${i}" style="width: ${colWidth}px;"></div>`
+            }
+            this.$el.append(html)
+            this.$cols = this.$el.find(".box")
+            this.setImages(defaultNum || this.colNum * 4)
+            this.flag = true
+            $(window).on('scroll', this.scroll.bind(this))
+          }
+          scroll() {
+            if (this.flag) {
+              if ($(document).height() - $(window).scrollTop() - $(window).height() < 150) {
+                this.flag = false
+                this.setImages(this.oneLoadNum)
+                setTimeout(() => {
+                  this.flag = true
+                }, this.sensitivity);
+              }
+            }
+          }
+          setImages(num) {
+            this.addImageGen = this.AddImage(num)
+            this.addImageGen.next()
+          }
+          addImage() {
+            let $minHeightBox = $(this.getMinBox())
+            let randomImg = imgs[parseInt(Math.random() * 20)]
+            const id = this.createId.next().value
+            let html = `<div class="imgbox"><img id="img-${id}" class="img" src="${randomImg}"></div>`
+            $minHeightBox.append(html)
+            let img = document.getElementById('img-'+id)
+            img.onload = () => {
+              $(img).addClass('img-show')
+              this.addImageGen.next()
+            }
+          }
+          getMinBox() {
+            let dom = this.$cols[0]
+            this.$cols.each((index, item) => {
+              if ($(dom).height() > $(item).height()) {
+                dom = item
+              }
+            })
+            return dom
+          }
+        }
+
+        const waterfall = new Waterfall(".main", 5, 2, 60)
+        waterfall.init()
+      })
+    </script>
+  </body>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    .main {
+      width: 100%;
+      padding: 30px;
+      overflow: hidden;
+    }
+    .box {
+      padding: 20px;
+      float: left;
+    }
+    .imgbox {
+      border: 1px solid #cdcdcd;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      box-shadow: beige;
+      padding: 10px;
+    }
+    .img {
+      opacity: 0;
+      transition: opacity 1000ms;
+      width: 100%;
+      height: auto;
+    }
+    .img-show {
+      opacity: 1;
+    }
+  </style>
+  <style></style>
+</html>
